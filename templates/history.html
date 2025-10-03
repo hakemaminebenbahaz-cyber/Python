@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Historique de {{ account.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Historique de {{ account.name }}</h1>
+        <ul class="history">
+            {% for event in account.history %}
+                <li>{{ event }}</li>
+            {% endfor %}
+        </ul>
+        <a class="btn" href="{{ url_for('account_page', name=account.name) }}">Retour</a>
+    </div>
+</body>
+</html>
