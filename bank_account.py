@@ -1,34 +1,22 @@
-
 import random
 from flask import Flask, render_template, request, redirect, url_for, session
 
-# ================== FLASK APP ================== #
-# Création de l'application Flask
 app = Flask(__name__)
-app.secret_key = "supersecret"  # nécessaire pour gérer les sessions (login/logout)
-
+app.secret_key = "supersecret"  
 
 # ================== PARTIE 1 : CLASSE & COMPTES ================== #
 class Account:
-    """Classe représentant un compte bancaire."""
-
     def __init__(self, name, balance=2000):
-        # Nom du titulaire
         self.name = name
-        # Numéro de compte généré aléatoirement (10 chiffres)
         self.account_number = random.randint(1000000000, 9999999999)
-        # Solde du compte
         self.balance = balance
-        # Historique des opérations (list de strings)
         self.history = []
 
     def deposit(self, amount):
-        """Effectue un dépôt et l'ajoute à l'historique"""
         self.balance += amount
         self.history.append(f"Dépôt de {amount} € → Solde: {self.balance} €")
 
     def withdraw(self, amount):
-        """Effectue un retrait si le solde est suffisant"""
         if amount > self.balance:
             self.history.append(f"Échec retrait {amount} € (fonds insuffisants)")
         else:
@@ -36,89 +24,72 @@ class Account:
             self.history.append(f"Retrait de {amount} € → Solde: {self.balance} €")
 
 
-# ================== PARTIE 2 : CREATION DE COMPTES ================== #
-# On crée deux comptes de test
+# ================== PARTIE 2 : COMPTES ================== #
 accounts = {
     "Ross": Account("Ross"),
     "Rachel": Account("Rachel")
 }
 
-# On simule quelques transactions pour remplir l'historique
+# Historique de démo
 accounts["Ross"].deposit(500)
 accounts["Ross"].withdraw(1150)
-
 accounts["Rachel"].deposit(1500)
 accounts["Rachel"].withdraw(50)
 
+# ================== PARTIE 2B : IDENTIFIANTS ================== #
+users = {
+    "Ross": {"password": "ross123", "account": accounts["Ross"]},
+    "Rachel": {"password": "rachel123", "account": accounts["Rachel"]}
+}
 
-# ================== PARTIE 3 : ROUTES FLASK ================== #
+# ================== ROUTES ================== #
 
 # -------- LOGIN -------- #
 @app.route("/", methods=["GET", "POST"])
 def login():
-    """
-    Page de login (admin/admin).
-    Si l'utilisateur est correct → redirige vers le dashboard.
-    Sinon → affiche un message d'erreur.
-    """
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-
-        if username == "admin" and password == "admin":
+        if username in users and users[username]["password"] == password:
             session["logged_in"] = True
-            return redirect(url_for("dashboard"))
+            session["user"] = username
+            return redirect(url_for("account_page", name=username))
         else:
             return render_template("login.html", error="Identifiants incorrects")
-
     return render_template("login.html")
 
-
-# -------- DASHBOARD -------- #
-@app.route("/dashboard")
-def dashboard():
-    """
-    Tableau de bord qui liste tous les comptes existants.
-    Accessible uniquement si connecté.
-    """
-    if not session.get("logged_in"):
-        return redirect(url_for("login"))
-    return render_template("dashboard.html", accounts=accounts)
-
-
-# -------- PAGE COMPTE -------- #
+# -------- ACCOUNT -------- #
 @app.route("/account/<name>", methods=["GET", "POST"])
 def account_page(name):
-    """
-    Page qui affiche le détail d’un compte.
-    On peut y effectuer un dépôt ou un retrait.
-    """
-    if not session.get("logged_in"):
+    if not session.get("logged_in") or session.get("user") != name:
         return redirect(url_for("login"))
 
     account = accounts.get(name)
     if not account:
         return "Compte introuvable", 404
 
+    error = None
     if request.method == "POST":
-        action = request.form["action"]      # "deposit" ou "withdraw"
-        amount = int(request.form["amount"]) # Montant saisi
+        action = request.form.get("action")
+        amount = int(request.form["amount"])
 
         if action == "deposit":
             account.deposit(amount)
         elif action == "withdraw":
-            account.withdraw(amount)
+            if amount > account.balance:
+                error = "Fonds insuffisants ! Retrait impossible."
+                account.history.append(f"Échec retrait {amount} € (fonds insuffisants)")
+            else:
+                account.withdraw(amount)
+        else:
+            error = "Veuillez choisir une opération valide."
 
-    return render_template("account.html", account=account)
+    return render_template("account.html", account=account, error=error)
 
-
-# -------- HISTORIQUE -------- #
+# -------- HISTORY -------- #
 @app.route("/history/<name>")
 def history(name):
-    """
-    Page qui affiche l’historique des transactions d’un compte.
-    """
-    if not session.get("logged_in"):
+    if not session.get("logged_in") or session.get("user") != name:
         return redirect(url_for("login"))
 
     account = accounts.get(name)
@@ -127,9 +98,12 @@ def history(name):
 
     return render_template("history.html", account=account)
 
+# -------- LOGOUT -------- #
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
 
-# ================== LANCEMENT APP ================== #
+# ================== LANCEMENT ================== #
 if __name__ == "__main__":
-    # Lancement du serveur Flask en mode debug
     app.run(debug=True)
-
