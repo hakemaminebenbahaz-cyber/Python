@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <title>Tableau de Bord</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Liste des Comptes</h1>
+        <div class="header">
+            <i class="fas fa-chart-line bank-logo"></i> <h1>Liste des Comptes</h1>
+        </div>
+        
         <ul class="account-list">
             {% for name, acc in accounts.items() %}
-                <li><a href="{{ url_for('account_page', name=name) }}">{{ name }}</a></li>
+                <li>
+                    <a href="{{ url_for('account_page', name=name) }}">
+                        <i class="fas fa-wallet"></i> {{ name }}
+                    </a>
+                </li>
             {% endfor %}
         </ul>
     </div>
