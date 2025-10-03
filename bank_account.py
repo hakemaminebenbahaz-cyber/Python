@@ -132,3 +132,4 @@ def history(name):
 if __name__ == "__main__":
     # Lancement du serveur Flask en mode debug
     app.run(debug=True)
+
