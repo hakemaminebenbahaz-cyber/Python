@@ -4,22 +4,28 @@
     <meta charset="UTF-8">
     <title>{{ account.name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Compte de {{ account.name }}</h1>
-        <p><strong>Numéro :</strong> {{ account.account_number }}</p>
-        <p><strong>Solde :</strong> {{ account.balance }} €</p>
+        <div class="header">
+            <i class="fas fa-user-circle bank-logo"></i> <h1>Compte de {{ account.name }}</h1>
+        </div>
+        
+        <p><strong><i class="fas fa-hashtag"></i> Numéro :</strong> {{ account.account_number }}</p>
+        <p><strong><i class="fas fa-euro-sign"></i> Solde :</strong> {{ account.balance }} €</p>
 
         <h2>Opérations</h2>
         <form method="POST" class="card">
-            <input type="number" name="amount" placeholder="Montant" required>
-            <button type="submit" name="action" value="deposit">Dépôt</button>
-            <button type="submit" name="action" value="withdraw">Retrait</button>
+            <label for="amount">Montant de l'opération:</label>
+            <input type="number" name="amount" id="amount" placeholder="Montant" required>
+            
+            <button type="submit" name="action" value="deposit"><i class="fas fa-plus"></i> Dépôt</button>
+            <button type="submit" name="action" value="withdraw"><i class="fas fa-minus"></i> Retrait</button>
         </form>
 
-        <a class="btn" href="{{ url_for('history', name=account.name) }}">Voir l'historique</a>
-        <a class="btn" href="{{ url_for('dashboard') }}">Retour</a>
+        <a class="btn" href="{{ url_for('history', name=account.name) }}"><i class="fas fa-history"></i> Voir l'historique</a>
+        <a class="btn" href="{{ url_for('dashboard') }}"><i class="fas fa-arrow-left"></i> Retour au tableau de bord</a>
     </div>
 </body>
 </html>
