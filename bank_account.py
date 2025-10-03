@@ -1,5 +1,3 @@
-
-
 # ================= ROUTES FLASK ================= #
 # Page de login
 @app.route("/", methods=["GET", "POST"])
