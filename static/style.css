@@ -1,76 +1,160 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f4f8;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef1f5; /* Fond plus clair */
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Centrer verticalement */
 }
 
 .container {
-    width: 80%;
-    margin: auto;
-    padding: 20px;
-}
-
-h1 {
-    text-align: center;
-    color: #2c3e50;
-}
-
-.card {
+    width: 90%;
+    max-width: 800px; /* Taille maximale augmentée pour le contenu */
+    margin: 20px auto;
+    padding: 30px;
     background: white;
-    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08); /* Ombre plus douce */
+}
+
+/* --- TÊTE/LOGO --- */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.bank-logo {
+    font-size: 48px; /* Taille de l'icône du logo */
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    font-size: 28px;
+    color: #2c3e50;
+    border-bottom: 3px solid #2ecc71; /* Soulignement vert */
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* --- CARTES/FORMULAIRES --- */
+.card {
+    background: #f8f9fa; /* Fond de carte plus clair */
+    padding: 25px;
     margin: 20px auto;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    max-width: 400px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05); /* Ombre intérieure subtile */
+    max-width: 450px;
 }
 
-input, button {
+label {
     display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #34495e;
 }
 
-button {
-    background-color: #27ae60;
+input[type="text"], input[type="password"], input[type="number"] {
+    display: block;
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* --- BOUTONS/ACTIONS --- */
+button, .btn {
+    display: flex; /* Permet d'aligner l'icône et le texte */
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
     border: none;
     color: white;
     font-weight: bold;
     cursor: pointer;
     border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"] {
+    background-color: #3498db; /* Bleu primaire */
+}
+
+button[name="action"][value="deposit"] {
+    background-color: #2ecc71; /* Vert pour Dépôt */
+    margin-top: 5px;
+}
+
+button[name="action"][value="withdraw"] {
+    background-color: #e74c3c; /* Rouge pour Retrait */
 }
 
 button:hover {
-    background-color: #219150;
+    opacity: 0.9;
+}
+
+.btn {
+    background: #34495e; /* Gris foncé pour les liens de retour/historique */
+    width: auto;
+    display: inline-block;
+    padding: 10px 15px;
+}
+
+/* Icône dans les boutons */
+button i, .btn i {
+    margin-right: 8px;
+}
+
+/* --- LISTES ET MESSAGES --- */
+.account-list {
+    list-style: none;
+    padding: 0;
 }
 
 .account-list li {
     margin: 10px 0;
-    list-style: none;
+    border-bottom: 1px solid #ecf0f1;
+    padding-bottom: 10px;
 }
 
 .account-list a {
     text-decoration: none;
     color: #2980b9;
     font-size: 18px;
+    transition: color 0.3s ease;
 }
 
-.btn {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 15px;
-    background: #2980b9;
-    color: white;
+.account-list a:hover {
+    color: #3498db;
+}
+
+.history {
+    list-style: none;
+    padding: 0;
+}
+
+.history li {
+    background: #ecf0f1;
+    padding: 10px;
+    margin-bottom: 8px;
     border-radius: 5px;
-    text-decoration: none;
-}
-
-.btn:hover {
-    background: #1f669b;
+    border-left: 5px solid #bdc3c7;
 }
 
 .error {
-    color: red;
+    color: #e74c3c;
+    background-color: #fceae9;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
     font-weight: bold;
+    border: 1px solid #e74c3c;
 }
