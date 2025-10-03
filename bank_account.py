@@ -1,3 +1,10 @@
+import random
+from flask import Flask, render_template, request, url_for, session
+
+# Création de l'application Flask
+app = Flask(__name__)
+app.secret_key = "supersecret"  # nécessaire pour la session (login)
+
 # Classe Compte
 class Account:
     def __init__(self, name, balance=2000):
