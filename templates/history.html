@@ -1,23 +1,116 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
+ <meta charset="UTF-8">
     <title>Historique de {{ account.name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #36b9cc, #4e73df);
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #fff;
+            padding: 2rem 3rem;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+            width: 450px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .bank-logo {
+            font-size: 2rem;
+            color: #36b9cc;
+            margin-bottom: 0.3rem;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            color: #333;
+        }
+
+        .history {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem 0;
+        }
+
+        .history li {
+            background: #f8f9fc;
+            margin-bottom: 0.7rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: #444;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .history li:hover {
+            background: #eef3ff;
+            transform: translateX(5px);
+        }
+
+        .history i {
+            color: #4e73df;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            background: #4e73df;
+            color: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background: #2e59d9;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <i class="fas fa-book-open bank-logo"></i> <h1>Historique de {{ account.name }}</h1>
+            <i class="fas fa-book-open bank-logo"></i>
+            <h1>Historique de {{ account.name }}</h1>
         </div>
         
         <ul class="history">
             {% for event in account.history %}
                 <li><i class="fas fa-clock"></i> {{ event }}</li>
+            {% else %}
+                <li><i class="fas fa-info-circle"></i> Aucun historique disponible</li>
             {% endfor %}
         </ul>
-        <a class="btn" href="{{ url_for('account_page', name=account.name) }}"><i class="fas fa-arrow-left"></i> Retour au compte</a>
+        
+        <div style="text-align: center;">
+            <a class="btn" href="{{ url_for('account_page', name=account.name) }}">
+                <i class="fas fa-arrow-left"></i> Retour au compte
+            </a>
+        </div>
     </div>
 </body>
 </html>
