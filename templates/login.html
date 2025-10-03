@@ -2,14 +2,103 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Login Admin</title>
+    <title>Login client</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .container {
+            background: #fff;
+            padding: 2rem 3rem;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 350px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .header {
+            margin-bottom: 1.5rem;
+        }
+
+        .bank-logo {
+            font-size: 2.2rem;
+            color: #4e73df;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            color: #333;
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+            font-size: 0.9rem;
+            color: #444;
+        }
+
+        form input {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        form input:focus {
+            border-color: #4e73df;
+            outline: none;
+            box-shadow: 0px 0px 5px rgba(78, 115, 223, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: #4e73df;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #375ac3;
+            transform: scale(1.03);
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <i class="fas fa-university bank-logo"></i> <h1>Connexion Admin</h1>
+            <i class="fas fa-university bank-logo"></i>
+            <h1>Portail Client</h1>
         </div>
         
         {% if error %}
@@ -17,10 +106,12 @@
         {% endif %}
         
         <form method="POST" class="card">
-            <label for="username"><i class="fas fa-user"></i> Nom d'utilisateur:</label>
-            <input type="text" name="username" id="username" required>
-            <label for="password"><i class="fas fa-lock"></i> Mot de passe:</label>
-            <input type="password" name="password" id="password" required>
+            <label for="username"><i class="fas fa-user"></i> Nom d'utilisateur</label>
+            <input type="text" name="username" id="username" placeholder="Entrez votre identifiant" required>
+            
+            <label for="password"><i class="fas fa-lock"></i> Mot de passe</label>
+            <input type="password" name="password" id="password" placeholder="Entrez votre mot de passe" required>
+            
             <button type="submit"><i class="fas fa-sign-in-alt"></i> Se connecter</button>
         </form>
     </div>
