@@ -2,30 +2,175 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>{{ account.name }}</title>
+    <title>Compte de {{ account.name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #1cc88a, #4e73df);
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #fff;
+            padding: 2rem 3rem;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+            width: 450px;
+            animation: fadeIn 0.8s ease-in-out;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 1.5rem;
+        }
+
+        .bank-logo {
+            font-size: 2rem;
+            color: #1cc88a;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            color: #333;
+        }
+
+        .account-info {
+            background: #f8f9fc;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .account-info p {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+            color: #444;
+        }
+
+        .actions form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .actions label {
+            text-align: left;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Même largeur pour select et input */
+        .actions select,
+        .actions input {
+            width: 100%;
+            box-sizing: border-box; /* inclut padding et bordure dans la largeur */
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .actions select:focus,
+        .actions input:focus {
+            border-color: #4e73df;
+            outline: none;
+            box-shadow: 0px 0px 5px rgba(78, 115, 223, 0.5);
+        }
+
+        .btn {
+            width: 100%; /* bouton aussi aligné */
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            color: white;
+            background: #4e73df;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #375ac3;
+        }
+
+        .links a {
+            display: inline-block;
+            margin: 0.5rem 0;
+            text-decoration: none;
+            color: #4e73df;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .links a:hover {
+            color: #2e59d9;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <i class="fas fa-user-circle bank-logo"></i> <h1>Compte de {{ account.name }}</h1>
+            <i class="fas fa-wallet bank-logo"></i> 
+            <h1>Compte de {{ account.name }}</h1>
         </div>
-        
-        <p><strong><i class="fas fa-hashtag"></i> Numéro :</strong> {{ account.account_number }}</p>
-        <p><strong><i class="fas fa-euro-sign"></i> Solde :</strong> {{ account.balance }} €</p>
 
-        <h2>Opérations</h2>
-        <form method="POST" class="card">
-            <label for="amount">Montant de l'opération:</label>
-            <input type="number" name="amount" id="amount" placeholder="Montant" required>
-            
-            <button type="submit" name="action" value="deposit"><i class="fas fa-plus"></i> Dépôt</button>
-            <button type="submit" name="action" value="withdraw"><i class="fas fa-minus"></i> Retrait</button>
-        </form>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
 
-        <a class="btn" href="{{ url_for('history', name=account.name) }}"><i class="fas fa-history"></i> Voir l'historique</a>
-        <a class="btn" href="{{ url_for('dashboard') }}"><i class="fas fa-arrow-left"></i> Retour au tableau de bord</a>
+        <div class="account-info">
+            <p><strong>Numéro de compte :</strong> {{ account.account_number }}</p>
+            <p><strong>Solde actuel :</strong> {{ account.balance }} €</p>
+        </div>
+
+        <div class="actions">
+            <form method="POST">
+                <label for="action">Choisissez l'opération :</label>
+                <select name="action" id="action" required>
+                    <option value="" disabled selected>-- Sélectionnez --</option>
+                    <option value="deposit">Dépôt</option>
+                    <option value="withdraw">Retrait</option>
+                </select>
+
+                <input type="number" name="amount" placeholder="Montant" required min="1">
+
+                <button type="submit" class="btn">
+                    <i class="fas fa-check-circle"></i> Valider
+                </button>
+            </form>
+        </div>
+
+        <div class="links">
+            <a href="{{ url_for('history', name=account.name) }}">
+                <i class="fas fa-history"></i> Voir l’historique
+            </a>
+            <br>
+            <a href="{{ url_for('logout') }}">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </a>
+        </div>
     </div>
 </body>
 </html>
